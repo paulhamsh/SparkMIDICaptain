@@ -80,7 +80,7 @@ bool spark_state_tracker_start() {
   DEBUG("SparkIO version: CircularArray and malloc");
   
   // handle different spark types
-  DEB("SPARK TYPE ");
+  DEB("SPARK TYPE: ");
   switch (spark_type) {
     case S40:
       DEBUG("Spark 40");
@@ -94,6 +94,9 @@ bool spark_state_tracker_start() {
     case LIVE:
       DEBUG("Spark LIVE");
       break;      
+    case SPARK2:
+      DEBUG("Spark 2");
+      break;    
     case NONE:
       DEBUG("Unknown");
       break; 
