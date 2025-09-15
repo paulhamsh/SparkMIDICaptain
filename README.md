@@ -40,4 +40,6 @@ End of setup
 Starting
 ```
 
+Connecting the app doesn't work yet - must be more changes in NimBLE that requires updates.   
+
 
