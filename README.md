@@ -1,7 +1,7 @@
 # Spark MIDI Captain
 
     
-##Dependencies:
+## Dependencies:
 
 ```
 NimBLE-Arduino               2.3.6                        
@@ -12,6 +12,7 @@ USB Host Shield Library 2.0  1.7.0
 ```
 
 USB Host Shield is here: https://yuuichiakagawa.github.io/USBH_MIDI/  and  https://github.com/felis/USB_Host_Shield_2.0     
+
 
 
 
