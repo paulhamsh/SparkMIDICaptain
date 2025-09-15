@@ -17,7 +17,7 @@ This works fully with NimBLE 1.4.3.
 With NimBLE 2.3.6 there is an issue with the app connecting to the ESP32 - the code needs to be updated to cope with the changes in v2.    
 
 For now it is recommended to use NimBLE 1.4.3. 
-There are two versions - src/v143 and src/236    
+There are two versions - in folders src/v143 and src/v236    
 
 On startup, you should see this 9turn on the Spark amp first!:
 
@@ -43,6 +43,7 @@ Got preset: 9
 End of setup
 Starting
 ```
+
 
 
 
