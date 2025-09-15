@@ -42,7 +42,7 @@ class MyClientCallback : public BLEClientCallbacks
     DEBUG("Spark connected");
     ble_spark_connected = true;   
   }
-  void onDisconnect(BLEClient *pclient) {
+  void onDisconnect(BLEClient *pclient, int reason) {
     connected_sp = false;    
     ble_spark_connected = false;     
     DEBUG("Spark disconnected");   
@@ -52,7 +52,7 @@ class MyClientCallback : public BLEClientCallbacks
 // server callback for connection to BLE app
 
 class MyServerCallback : public BLEServerCallbacks {
-  void onConnect(BLEServer *pserver)  {
+  void onConnect(BLEServer *pserver, NimBLEConnInfo& connInfo)  {
      if (pserver->getConnectedCount() == 1) {
       DEBUG("App connection event and is connected"); 
       ble_app_connected = true;
@@ -61,7 +61,7 @@ class MyServerCallback : public BLEServerCallbacks {
       DEBUG("App connection event and is not really connected");   
     }
   }
-  void onDisconnect(BLEServer *pserver) {
+  void onDisconnect(BLEServer *pserver, NimBLEConnInfo& connInfo, int reason) {
     ble_app_connected = false;
     DEBUG("App disconnected");
     #ifdef CLASSIC
@@ -117,7 +117,7 @@ void notifyCB_sp(BLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData,
 
 
 class CharacteristicCallbacks: public BLECharacteristicCallbacks {
-  void onWrite(BLECharacteristic* pCharacteristic) {
+  void onWrite(BLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
     std::string s = pCharacteristic->getValue(); 
     int size = s.size();
     const char *buf = s.c_str();
@@ -232,7 +232,8 @@ bool connect_to_all() {
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new MyServerCallback());  
   pService = pServer->createService(S_SERVICE);
-
+  pServer->advertiseOnDisconnect(true);
+  
 #ifdef CLASSIC  
   pCharacteristic_receive = pService->createCharacteristic(S_CHAR1, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_WRITE_NR);
   pCharacteristic_send = pService->createCharacteristic(S_CHAR2, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
@@ -363,10 +364,8 @@ bool connect_to_all() {
   //pAdvertising->setScanResponseData(oScanAdvertisementData);
   //== Stop: that code
 
-#ifndef CLASSIC
-  pAdvertising->setName(spark_ble_name);
-#endif
 
+  pAdvertising->setName(spark_ble_name);
   //pAdvertising->setManufacturerData(manuf_data);
   pAdvertising->start(); 
 
@@ -380,8 +379,9 @@ void send_to_spark(byte *buf, int len) {
 
 void send_to_app(byte *buf, int len) {
   if (ble_app_connected) {
-    pCharacteristic_send->setValue(buf, len);
-    pCharacteristic_send->notify(true);
+    //pCharacteristic_send->setValue(buf, len);
+    //pCharacteristic_send->notify(true);
+    pCharacteristic_send->notify(buf, len, BLE_HS_CONN_HANDLE_NONE);
   }
 #if defined CLASSIC
   if (bt_app_connected) {
