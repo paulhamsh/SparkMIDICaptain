@@ -4,7 +4,7 @@
 ## Dependencies:
 
 ```
-NimBLE-Arduino               2.3.6                        
+NimBLE-Arduino               2.3.6   OR   1.4.3                     
 SSD1306 by Adafruit          2.5.14     
 ESP32 Dev Module board       3.2.0   
 Adafruit GFX                 1.12.1
@@ -13,7 +13,11 @@ USB Host Shield Library 2.0  1.7.0
 
 USB Host Shield is here: https://yuuichiakagawa.github.io/USBH_MIDI/  and  https://github.com/felis/USB_Host_Shield_2.0     
 
+This works fully with NimBLE 1.4.3.     
+With NimBLE 2.3.6 there is an issue with the app connecting to the ESP32 - the code needs to be updated to cope with the changes in v2.    
 
+For now it is recommended to use NimBLE 1.4.3. 
+There are two versions - src/v143 and src/236    
 
 On startup, you should see this 9turn on the Spark amp first!:
 
@@ -40,6 +44,6 @@ End of setup
 Starting
 ```
 
-Connecting the app doesn't work yet - must be more changes in NimBLE that requires updates.   
+
 
 
