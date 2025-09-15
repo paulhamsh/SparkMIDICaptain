@@ -286,7 +286,9 @@ bool connect_to_all() {
           spark_type = MINI;  
         else if (strstr(spark_ble_name, "LIVE") != NULL)     
           spark_type = LIVE; 
-        else {
+        else if (strstr(spark_ble_name, "Spark 2") != NULL)     
+          spark_type = SPARK2; 
+       else {
           DEBUG("Couldn't match Spark type");
           spark_type = NONE;
         }
