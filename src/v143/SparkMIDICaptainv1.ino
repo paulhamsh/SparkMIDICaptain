@@ -41,12 +41,7 @@ void loop() {
   int midi_chan, midi_cmd;
   bool onoff;
   
-
-  if (update_spark_state()) {
-    Serial.print("Got message ");
-    Serial.println(cmdsub, HEX);
-  }
-
+  
   if (update_midi(mi)) {
     midi_chan = (mi[0] & 0x0f) + 1;
     midi_cmd = mi[0] & 0xf0;
@@ -60,6 +55,16 @@ void loop() {
         case 3:              change_hardware_preset(3);                 break; // MIDI Captain 1D
       }
     }
+
+    if (midi_cmd == 0x90) { 
+      switch (mi[1]) {
+        case 48:           change_hardware_preset(0);                 Serial.println("Hardware preset 0");  break; 
+        case 50:           change_hardware_preset(1);                 Serial.println("Hardware preset 1");  break; 
+        case 52:           change_hardware_preset(2);                 Serial.println("Hardware preset 2");  break; 
+        case 53:           change_hardware_preset(3);                 Serial.println("Hardware preset 3");  break; 
+      }
+    }
+
 
     // Other examples - need the correct midi code frrom MIDI Captain to get these working
     if (midi_cmd == 0xb0) {     
@@ -75,7 +80,14 @@ void loop() {
         case 9:              change_hardware_preset(2);                 break; // MIDI Captain 
         case 10:             change_hardware_preset(3);                 break; // MIDI Captain 
         case 11:             change_comp_onoff(onoff);                  break; // MIDI Captain 
-        }
+      }
     }
   }
+
+  if (update_spark_state()) {
+    Serial.print("Got message ");
+    Serial.println(cmdsub, HEX);
+  }
+
 }
+

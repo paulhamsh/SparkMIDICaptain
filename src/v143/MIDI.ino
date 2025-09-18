@@ -1,4 +1,54 @@
 #include "MIDI.h"
+#include "SparkComms.h"
+
+// MIDI State processing for BLE streams
+
+void MIDIState::initialise(RingBuffer *rb)
+{
+  midi_stream = rb;
+  midi_data_count = 0;
+  midi_cmd_count = 0;
+  midi_status = 0;
+}
+
+bool MIDIState::process(byte mi_data[3]) 
+{
+  byte b;
+  bool got_data;
+
+  got_data = false;
+  
+  if (!midi_stream->is_empty()) {
+    midi_stream->get(&b);
+    
+    if (b <= 0x7F) {
+      midi_data[midi_data_count] = b;
+      midi_data_count++;
+      midi_cmd_count = 0;
+      if ((midi_status == 0xC0 || midi_status == 0xD0) || midi_data_count >= 2) {
+        mi_data[0] = midi_status;
+        mi_data[1] = midi_data[0];
+        if (midi_data_count == 2)
+          mi_data[2] = midi_data[1];
+        else
+          mi_data[2] = 0;
+        midi_data_count = 0;
+        got_data = true;
+      }
+    } 
+    else {
+      midi_cmd_count++;
+      if (midi_cmd_count > 1) {
+        midi_status = b;            // the last byte before a non-cmd byte will always be status unless it was a single timestamp
+      }
+    }
+  } 
+  return got_data;
+}
+
+MIDIState ble_midi;
+
+
 
 void setup_midi() {
   byte b;
@@ -13,6 +63,9 @@ void setup_midi() {
     usb_connected = true;   
   }
 #endif
+
+  ble_midi.initialise(&midi_in);
+
 }
 
 bool update_midi(byte *mid) {
@@ -20,6 +73,9 @@ bool update_midi(byte *mid) {
   byte b;
   
   got_midi = false;
+
+  // BLE MIDI controller
+  if (ble_midi.process(mid)) got_midi = true;
 
 #ifdef USB_HOST
   // USB MIDI  
