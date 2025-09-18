@@ -116,6 +116,26 @@ void notifyCB_sp(BLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData,
 }
 
 
+// This works with IK Multimedia iRig Blueboard and the Akai LPD8 wireless - interestingly they have the same UUIDs
+void notifyCB_pedal(BLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify){
+
+  int i;
+  byte b;
+
+  for (i = 0; i < length; i++) {
+    b = pData[i];
+    midi_in.add(b);
+  }
+  midi_in.commit();
+
+}
+
+
+
+
+
+
+
 class CharacteristicCallbacks: public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) {
     std::string s = pCharacteristic->getValue(); 
@@ -166,13 +186,16 @@ void data_callback(const uint8_t *buffer, size_t size) {
 
 
 BLEUUID SpServiceUuid(C_SERVICE);
+// BLE pedal
+BLEUUID PedalServiceUuid(PEDAL_SERVICE);
 
 void connect_spark() {
   if (found_sp && !connected_sp) {
     if (pClient_sp != nullptr && pClient_sp->isConnected())
        DEBUG("connect_spark() thinks I was already connected");
     
-    if (pClient_sp->connect(sp_device)) {
+    //if (pClient_sp->connect(sp_device)) {
+    if (pClient_sp->connect(sp_address)) {  
 #if defined CLASSIC  && !defined HELTEC_WIFI
         pClient_sp->setMTU(517);  
 #endif
@@ -203,6 +226,40 @@ void connect_spark() {
 }
 
 
+void connect_pedal() {
+  if (found_pedal && !connected_pedal) {
+    //if (pClient_pedal->connect(pedal_device)) {  
+    if (pClient_pedal->connect(pedal_address)) {
+#if defined CLASSIC && !defined HELTEC_WIFI
+      // BUG?
+      pClient_sp->setMTU(517);
+#endif
+      connected_pedal = true;
+      pService_pedal = pClient_pedal->getService(PedalServiceUuid);
+      if (pService_pedal != nullptr) {
+        pReceiver_pedal = pService_pedal->getCharacteristic(PEDAL_CHAR);
+
+        if (pReceiver_pedal && pReceiver_pedal->canNotify()) {
+#ifdef CLASSIC
+          pReceiver_pedal->registerForNotify(notifyCB_pedal);
+          p2902_pedal = pReceiver_pedal->getDescriptor(BLEUUID((uint16_t)0x2902));
+          if(p2902_pedal != nullptr)
+            p2902_pedal->writeValue((uint8_t*)notifyOn, 2, true);
+#else
+          if (!pReceiver_pedal->subscribe(true, notifyCB_pedal, true)) {
+            connected_pedal = false;
+            DEBUG("Pedal disconnected");
+            NimBLEDevice::deleteClient(pClient_pedal);
+          } 
+#endif
+        }
+      }
+      DEBUG("connect_pedal(): pedal connected");
+    }
+  }
+}
+
+
 
 bool connect_to_all() {
   int i, j;
@@ -224,6 +281,10 @@ bool connect_to_all() {
   pClient_sp = BLEDevice::createClient();
   pClient_sp->setClientCallbacks(new MyClientCallback());
  
+  // BLE pedal
+  pClient_pedal = BLEDevice::createClient();
+
+
   BLEDevice::getScan()->setInterval(40);
   BLEDevice::getScan()->setWindow(40);
   BLEDevice::getScan()->setActiveScan(true);
@@ -262,10 +323,14 @@ bool connect_to_all() {
   connected_sp = false;
   found_sp = false;
 
-  DEBUG("Scanning...");
+  // BLE pedal
+  connected_pedal = false;
+  found_pedal = false;
+
+  DEBUG("Scanning for Spark");
 
   counts = 0;
-  while (!found_sp && counts < MAX_SCAN_COUNT) {   // assume we only use a pedal if on already and hopefully found at same time as Spark, don't wait for it
+  while (!found_sp && counts < MAX_SPARK_SCAN_COUNT) {   // assume we only use a pedal if on already and hopefully found at same time as Spark, don't wait for it
     counts++;
     pResults = pScan->getResults(4000);
     
@@ -289,22 +354,41 @@ bool connect_to_all() {
           spark_type = LIVE; 
         else if (strstr(spark_ble_name, "Spark 2") != NULL)     
           spark_type = SPARK2; 
-       else {
+        else {
           DEBUG("Couldn't match Spark type");
           spark_type = NONE;
         }
 
         found_sp = true;
         connected_sp = false;
-        //sp_device = new BLEAdvertisedDevice(device);
-        sp_device = device;
+        sp_address = device->getAddress();
+      }
+    }
+  }
+
+  DEBUG("Scanning for BLE MIDI device");
+
+  counts = 0;
+  while (!found_pedal && counts < MAX_PEDAL_SCAN_COUNT) {  
+    counts++;
+    pResults = pScan->getResults(4000);
+    
+    for(i = 0; i < pResults.getCount()  && !found_pedal; i++) {
+      device = pResults.getDevice(i);
+      if (device->isAdvertisingService(PedalServiceUuid) 
+         || strcmp(device->getName().c_str(),"iRig BlueBoard") == 0
+         || strcmp(device->getName().c_str(),"WIDI Jack") == 0) {
+        DEBUG("Found BLE MIDI device");
+        found_pedal = true;
+        connected_pedal = false;
+        pedal_address= device->getAddress();
       }
     }
   }
 
   if (!found_sp) return false;   // failed to find the Spark within the number of counts allowed (MAX_SCAN_COUNT)
   connect_spark();
-
+  connect_pedal();
 
 #ifdef CLASSIC
   DEBUG("Starting classic bluetooth");

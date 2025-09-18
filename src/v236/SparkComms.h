@@ -1,6 +1,8 @@
 #ifndef SparkComms_h
 #define SparkComms_h
 
+#include "RingBuffer.h"
+
 // Timer routines
 //#define TIMER 100000
 #define SPARK_TIMEOUT 1000
@@ -73,7 +75,8 @@ bool ble_passthru;
 #define S_CHAR1   "ffc1"
 #define S_CHAR2   "ffc2"
 
-#define MAX_SCAN_COUNT 2
+#define MAX_SPARK_SCAN_COUNT 10
+#define MAX_PEDAL_SCAN_COUNT 2
 
 bool connect_to_all();
 void connect_spark();
@@ -110,5 +113,25 @@ BLERemoteCharacteristic *pReceiver_sp;
 BLERemoteCharacteristic *pSender_sp;
 BLERemoteDescriptor* p2902_sp;
 const BLEAdvertisedDevice *sp_device;
+BLEAddress sp_address;
+
+// BLE pedal
+
+#define PEDAL_SERVICE    "03b80e5a-ede8-4b33-a751-6ce34ec4c700"
+#define PEDAL_CHAR       "7772e5db-3868-4112-a1a9-f2669d106bf3"
+void connect_pedal();
+
+bool connected_pedal;
+bool found_pedal;
+
+RingBuffer midi_in;
+
+BLEClient *pClient_pedal;
+BLERemoteService *pService_pedal;
+BLERemoteCharacteristic *pReceiver_pedal;
+BLERemoteCharacteristic *pSender_pedal;
+BLERemoteDescriptor* p2902_pedal;
+const BLEAdvertisedDevice *pedal_device;
+BLEAddress pedal_address;
 
 #endif
