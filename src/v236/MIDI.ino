@@ -65,6 +65,11 @@ void setup_midi() {
 #endif
 
   ble_midi.initialise(&midi_in);
+
+  ser1 = new HardwareSerial(1); 
+  ser1->begin(31250, SERIAL_8N1, SER_RX, -1);
+  while (ser1->available())
+    b = ser1->read();
 }
 
 bool update_midi(byte *mid) {
@@ -83,6 +88,7 @@ bool update_midi(byte *mid) {
 
     if (Midi) {                                                  // USB Midi
       rcvd = Midi.RecvData(midi_buf, false);
+      if (rcvd > 0) Serial.println("Got some USB midi data");
       if (rcvd > 0 && !(midi_buf[0] == 0 && midi_buf[1] == 0 && midi_buf[2] == 0)) {
         mid[0] = midi_buf[0];
         mid[1] = midi_buf[1];
@@ -92,6 +98,22 @@ bool update_midi(byte *mid) {
     }
   }
 #endif
+
+  // Serial 1 - DIN MIDI
+  if (ser1->available()) {
+    mid[0] = ser1->read();
+    mid[1] = ser1->read();
+    
+    if (mid[0] == 0xC0 || mid[0] == 0xD0)
+      mid[2] = 0;
+    else 
+      mid[2] = ser1->read();
+      
+    if (mid[0] != 0xFE) {
+      got_midi = true;
+    }
+  }
+
 
   if (got_midi) {
     Serial.print("MIDI ");

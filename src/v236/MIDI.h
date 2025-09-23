@@ -1,6 +1,10 @@
 #ifndef MIDI_h
   #define MIDI_h
 
+  #define SER_RX 16
+  HardwareSerial *ser1;
+
+
   #ifdef USB_HOST
     #include <usbh_midi.h>
     #include <SPI.h>
