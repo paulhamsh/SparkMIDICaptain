@@ -600,6 +600,7 @@ void change_reverb_param(int param, float val){
 void change_hardware_preset(int pres_num) {
   if (pres_num >= 0 && pres_num <= 3) {  
     presets[CUR_EDITING][current_input] = presets[pres_num][current_input];
+    display_preset_num = pres_num;
     
     spark_msg_out.change_hardware_preset(0, pres_num);
     app_msg_out.change_hardware_preset(0, pres_num);  

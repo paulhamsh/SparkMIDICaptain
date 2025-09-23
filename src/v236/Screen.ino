@@ -17,3 +17,30 @@ void splash_screen() {
   display.print("CAPTAIN");
   display.display();
 }
+
+void show_connected() {
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.setTextSize(2);
+  display.setCursor(0, 10);
+  display.print("CONNECTED");
+  display.display();
+}
+
+
+void show_message(char *msg, int preset) {
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.setTextSize(2);
+  display.setCursor(0, 10);
+  display.print("MIDI:");
+  display.setCursor(0, 40);
+  display.print(msg);
+
+  display.setTextSize(3);
+  display.setCursor(100, 00);
+  display.print(preset);
+
+  display.display();
+}
+

@@ -13,5 +13,6 @@
   #define OLED_SCL 15
 
   void splash_screen();
-
+  void show_message(char *msg, int preset);  
+  void show_connected();
 #endif
