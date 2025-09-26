@@ -98,6 +98,7 @@ void usbh_task(void)
   static bool all_clients_gone = false;
   static bool all_dev_free = false;
 
+
   esp_err_t err = usb_host_lib_handle_events(HOST_EVENT_TIMEOUT, &event_flags);
   if (err == ESP_OK) {
     if (event_flags & USB_HOST_LIB_EVENT_FLAGS_NO_CLIENTS) {
