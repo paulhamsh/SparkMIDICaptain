@@ -1,6 +1,9 @@
 #include "Screen.h"
 
+
+
 void splash_screen() {
+#ifdef OLED_ON
   Wire.begin(OLED_SDA, OLED_SCL);  // set my SDA, SCL
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
@@ -16,19 +19,23 @@ void splash_screen() {
   display.setCursor(20, 40);
   display.print("CAPTAIN");
   display.display();
+#endif
 }
 
 void show_connected() {
+#ifdef OLED_ON
   display.clearDisplay();
   display.setTextColor(WHITE);
   display.setTextSize(2);
   display.setCursor(0, 10);
   display.print("CONNECTED");
   display.display();
+#endif
 }
 
 
 void show_message(char *msg, int preset) {
+#ifdef OLED_ON
   display.clearDisplay();
   display.setTextColor(WHITE);
   display.setTextSize(2);
@@ -42,5 +49,6 @@ void show_message(char *msg, int preset) {
   display.print(preset);
 
   display.display();
+#endif
 }
 

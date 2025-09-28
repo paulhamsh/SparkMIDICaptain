@@ -27,6 +27,7 @@ void setup() {
   delay(1000);
 
   splash_screen();
+
   setup_midi();
 
   Serial.println("Spark MIDI Captain");
@@ -63,10 +64,10 @@ void loop() {
 
     if (midi_cmd == 0x90) { 
       switch (mi[1]) {
-        case 48:           change_hardware_preset(0);                 Serial.println("Hardware preset 0");  break; 
-        case 50:           change_hardware_preset(1);                 Serial.println("Hardware preset 1");  break; 
-        case 52:           change_hardware_preset(2);                 Serial.println("Hardware preset 2");  break; 
-        case 53:           change_hardware_preset(3);                 Serial.println("Hardware preset 3");  break; 
+        case 24:           change_hardware_preset(0);                 Serial.println("Hardware preset 0");  break; 
+        case 26:           change_hardware_preset(1);                 Serial.println("Hardware preset 1");  break; 
+        case 28:           change_hardware_preset(2);                 Serial.println("Hardware preset 2");  break; 
+        case 29:           change_hardware_preset(3);                 Serial.println("Hardware preset 3");  break; 
       }
     }
 
@@ -89,9 +90,10 @@ void loop() {
     }
 
     // Update display
-
+    #ifdef OLED_ON
     sprintf(msg, "%2x %3d %3d", mi[0], mi[1], mi[2]);
     show_message(msg, display_preset_num);
+    #endif
   }
 
   if (update_spark_state()) {
