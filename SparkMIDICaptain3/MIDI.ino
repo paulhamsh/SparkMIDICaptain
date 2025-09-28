@@ -296,10 +296,17 @@ bool update_midi(byte *mid) {
   usbh_task();
 
   if (!USBHostBuf.is_empty()) {
-    USBHostBuf.get(&mid[0]);
-    USBHostBuf.get(&mid[1]);
-    USBHostBuf.get(&mid[2]);
-    
+    if (USBHostBuf.get_data_len() >= 3) {
+      USBHostBuf.get(&mid[0]);
+      USBHostBuf.get(&mid[1]);
+      USBHostBuf.get(&mid[2]);
+      got_midi = true;
+    }
+    else
+    { // not at least three bytes in the buffer - this can't be right, should always be a multiple of three
+      USBHostBuf.clear();
+      Serial.println("Cleared S3 USB Host circular buffer!");
+    }
     got_midi = true;
   }
   

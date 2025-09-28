@@ -12,8 +12,9 @@ class RingBuffer
     bool set_bit_at_index(int ind, uint8_t b);
     int  get_len();
     int  get_pos();
-    bool is_empty();
+    int  get_data_len();
     void commit();
+    bool is_empty();
     void drop();
     void clear();
     void dump();

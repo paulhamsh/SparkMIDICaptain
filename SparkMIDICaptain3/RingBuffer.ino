@@ -93,6 +93,10 @@ void RingBuffer::commit() {
   t_len = 0;
 }
 
+int RingBuffer::get_data_len() { // total  len
+  return len;
+}
+
 void RingBuffer::drop() {
   en = st + len;
   t_len = 0;
