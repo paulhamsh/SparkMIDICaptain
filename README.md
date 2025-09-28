@@ -22,7 +22,8 @@ https://github.com/enudenki/esp32-usb-host-midi-library
 (and https://www.hackster.io/ndenki/esp32-usb-host-midi-library-032d95)  
 https://github.com/touchgadget/esp32-usb-host-demos    
 
-I used code from the latter one - either would have been great!!!
+I used code from the touchgadget github - either would have been great!!!   
+The touchgadget one has a lot of useful information about obtaining 5v for the USB host - although the S3 has a solder bridge on the bottom for this purpose.    
 
 
 
@@ -55,6 +56,7 @@ Got preset: 9
 End of setup
 Starting
 ```
+
 
 
 
