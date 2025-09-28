@@ -1,8 +1,8 @@
 # Spark MIDI Captain
 
-Use ESP32, Spark amp and Midi Captain pedal    
-Now two versions, one for ESP32 and separate USBHost board, the other for an ESP32 S3 with onboard USB Host capability (plus an OTG cable)   
-
+Use ESP32, Spark amp and Midi Captain pedal       
+Now two versions, one for ESP32 and separate USBHost board, the other for an ESP32 S3 with onboard USB Host capability (plus an OTG cable)     
+See https://github.com/paulhamsh/SparkMIDI for all ther other information about this project.   
     
 ## Dependencies:
 
@@ -55,6 +55,7 @@ Got preset: 9
 End of setup
 Starting
 ```
+
 
 
 
