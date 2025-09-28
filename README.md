@@ -13,13 +13,22 @@ USB Host Shield Library 2.0  1.7.0
 
 USB Host Shield is here: https://yuuichiakagawa.github.io/USBH_MIDI/  and  https://github.com/felis/USB_Host_Shield_2.0        
 
-This works fully with NimBLE 1.4.3.       
-With NimBLE 2.3.6 there is an issue with the app connecting to the ESP32 - the code needs to be updated to cope with the changes in v2.      
+With the ESP32 S3 the on-board host USB is used. These two libraries were invaluable for integrating this:
 
-For now it is recommended to use NimBLE 1.4.3.     
-There are two versions - in folders src/v143 and src/v236      
+https://github.com/enudenki/esp32-usb-host-midi-library   
+(and https://www.hackster.io/ndenki/esp32-usb-host-midi-library-032d95)  
+https://github.com/touchgadget/esp32-usb-host-demos    
 
-On startup, you should see this 9turn on the Spark amp first!:     
+I used code from the latter one - either would have been great!!!
+
+
+
+This works fully with NimBLE 1.4.3 (src/v143) and 2.3.6 (src/v236).    
+
+MidiCaptainv3 only works with NimBLE 2.3.6 and the ESP32 S3.
+  
+
+On startup, you should see this - turn on the Spark amp first!:     
 
 ```
 Spark MIDI Captain
@@ -43,6 +52,7 @@ Got preset: 9
 End of setup
 Starting
 ```
+
 
 
 
