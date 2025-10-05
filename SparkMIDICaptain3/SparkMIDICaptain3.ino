@@ -19,6 +19,7 @@
 #include "Screen.h"
 #include "MIDI.h"
 
+int my_preset;
 
 void setup() {
   Serial.begin(115200);
@@ -37,6 +38,8 @@ void setup() {
 
   show_connected();
   DEBUG("Starting");
+
+  my_preset = 0;
 }
 
 
@@ -52,40 +55,44 @@ void loop() {
     midi_cmd = mi[0] & 0xf0;
     onoff = (mi[2] == 127 ? true : false);
 
-
-    if (midi_cmd == 0xc0) { 
-      switch (mi[1]) {
-        case 0:              change_hardware_preset(0);                 break; // MIDI Captain 1A
-        case 1:              change_hardware_preset(1);                 break; // MIDI Captain 1B
-        case 2:              change_hardware_preset(2);                 break; // MIDI Captain 1C
-        case 3:              change_hardware_preset(3);                 break; // MIDI Captain 1D
-      }
-    }
-
-    if (midi_cmd == 0x90) { 
-      switch (mi[1]) {
-        case 24:           change_hardware_preset(0);                 Serial.println("Hardware preset 0");  break; 
-        case 26:           change_hardware_preset(1);                 Serial.println("Hardware preset 1");  break; 
-        case 28:           change_hardware_preset(2);                 Serial.println("Hardware preset 2");  break; 
-        case 29:           change_hardware_preset(3);                 Serial.println("Hardware preset 3");  break; 
-      }
-    }
-
-
-    // Other examples - need the correct midi code frrom MIDI Captain to get these working
     if (midi_cmd == 0xb0) {     
       switch (mi[1]) {
-        case 1:              change_amp_param(AMP_MASTER, mi[2]/127.0); break; // MIDI Captain        
-        case 2:              change_amp_param(AMP_GAIN, mi[2]/127.0);   break; // MIDI Captain 
-        case 3:              change_drive_toggle();                     break; // MIDI Captain  
-        case 4:              change_mod_toggle();                       break; // MIDI Captain      
-        case 5:              change_delay_toggle();                     break; // MIDI Captain 
-        case 6:              change_reverb_toggle();                    break; // MIDI Captain 
-        case 7:              change_hardware_preset(0);                 break; // MIDI Captain 
-        case 8:              change_hardware_preset(1);                 break; // MIDI Captain 
-        case 9:              change_hardware_preset(2);                 break; // MIDI Captain 
-        case 10:             change_amp_param(AMP_MASTER, mi[2]/127.0); break; // MIDI Captain Volume
-        case 11:             change_comp_onoff(onoff);                  break; // MIDI Captain 
+        case 10:   change_amp_param(AMP_GAIN,   mi[2]/127.0); 
+                   Serial.print("Change amp gain ");
+                   Serial.print(mi[2]/127.0);
+                   break;
+        case 11:   change_amp_param(AMP_MASTER, mi[2]/127.0); 
+                   Serial.print("Change amp master volume ");
+                   Serial.print(mi[2]/127.0);
+                   break;         
+        case 20:   change_noisegate_toggle();  
+                   Serial.print("Toggle noisegate");               
+                   break;
+        case 21:   change_comp_toggle();                      
+                   Serial.println("Toggle comp");      
+                   break;
+        case 22:   change_drive_toggle();   
+                   Serial.println("Toggle drive");                        
+                   break;
+        case 23:   change_mod_toggle();     
+                   Serial.println("Toggle mod");                        
+                   break;
+        case 80:   change_delay_toggle();   
+                   Serial.println("Toggle delay");                        
+                   break; 
+        case 81:   change_reverb_toggle();                    
+                   Serial.println("Toggle reverb");      
+                   break; 
+        case 24:   my_preset++;
+                   if (my_preset > max_preset) my_preset = 0;
+                   change_hardware_preset(my_preset);
+                   Serial.println("Preset up");
+                   break; 
+        case 84:   my_preset--;
+                   if (my_preset < 0)  my_preset = max_preset;
+                   change_hardware_preset(my_preset);
+                   Serial.println("Preset down");
+                   break;             
       }
     }
 
