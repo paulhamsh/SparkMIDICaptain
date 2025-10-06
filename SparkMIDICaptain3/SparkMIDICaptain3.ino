@@ -57,38 +57,71 @@ void loop() {
 
     if (midi_cmd == 0xb0) {     
       switch (mi[1]) {
-        case 10:   change_amp_param(AMP_GAIN,   mi[2]/127.0); 
+        case 10: change_amp_param(AMP_GAIN,   mi[2]/127.0); 
                    Serial.print("Change amp gain ");
                    Serial.print(mi[2]/127.0);
                    break;
-        case 11:   change_amp_param(AMP_MASTER, mi[2]/127.0); 
+        case 11: change_amp_param(AMP_MASTER, mi[2]/127.0); 
                    Serial.print("Change amp master volume ");
                    Serial.print(mi[2]/127.0);
                    break;         
-        case 20:   change_noisegate_toggle();  
+        case 20: change_noisegate_toggle();  
                    Serial.print("Toggle noisegate");               
                    break;
-        case 21:   change_comp_toggle();                      
+        case 21: change_comp_toggle();                      
                    Serial.println("Toggle comp");      
                    break;
-        case 22:   change_drive_toggle();   
+        case 22: change_drive_toggle();   
                    Serial.println("Toggle drive");                        
                    break;
-        case 23:   change_mod_toggle();     
+        case 23: change_mod_toggle();     
                    Serial.println("Toggle mod");                        
                    break;
-        case 80:   change_delay_toggle();   
+        case 80: change_delay_toggle();   
                    Serial.println("Toggle delay");                        
                    break; 
-        case 81:   change_reverb_toggle();                    
+        case 81: change_reverb_toggle();                    
                    Serial.println("Toggle reverb");      
                    break; 
-        case 24:   my_preset++;
+        case 24: my_preset++;
                    if (my_preset > max_preset) my_preset = 0;
                    change_hardware_preset(my_preset);
                    Serial.println("Preset up");
                    break; 
-        case 84:   my_preset--;
+        case 84: my_preset--;
+                   if (my_preset < 0)  my_preset = max_preset;
+                   change_hardware_preset(my_preset);
+                   Serial.println("Preset down");
+                   break;             
+      }
+    }
+
+    if (midi_cmd == 0x80) {     
+      switch (mi[1]) {
+        case 57: change_noisegate_toggle();  
+                   Serial.print("Toggle noisegate");               
+                   break;
+        case 59: change_comp_toggle();                      
+                   Serial.println("Toggle comp");      
+                   break;
+        case 60: change_drive_toggle();   
+                   Serial.println("Toggle drive");                        
+                   break;
+        case 62: change_mod_toggle();     
+                   Serial.println("Toggle mod");                        
+                   break;
+        case 64: change_delay_toggle();   
+                   Serial.println("Toggle delay");                        
+                   break; 
+        case 65: change_reverb_toggle();                    
+                   Serial.println("Toggle reverb");      
+                   break; 
+        case 67: my_preset++;
+                   if (my_preset > max_preset) my_preset = 0;
+                   change_hardware_preset(my_preset);
+                   Serial.println("Preset up");
+                   break; 
+        case 69: my_preset--;
                    if (my_preset < 0)  my_preset = max_preset;
                    change_hardware_preset(my_preset);
                    Serial.println("Preset down");
