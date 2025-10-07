@@ -431,7 +431,7 @@ void update_ui_hardware() {
 void set_input1() {
   /*
   // DOn't think I ever implemented select_live_input_1() !!
-  
+
   if (spark_type == LIVE || spark_type == SPARK2) {
     spark_msg_out.select_live_input_1();
     spark_send();
@@ -605,7 +605,7 @@ void change_reverb_param(int param, float val){
 
 
 void change_hardware_preset(int pres_num) {
-  if (pres_num >= 0 && pres_num <= 3) {  
+  if (pres_num >= 0 && pres_num <= max_preset) {  
     presets[CUR_EDITING][current_input] = presets[pres_num][current_input];
     display_preset_num = pres_num;
     

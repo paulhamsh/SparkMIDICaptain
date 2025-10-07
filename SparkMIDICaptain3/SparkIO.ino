@@ -9,7 +9,7 @@
  *  The Message handles all other changes - change amp, change effect, change value of an effect parameter, change hardware preset and so on
  *  
  *  Conection is handled with the two commands:
- *  select_live_input_1();
+ *  
  *    connect_to_all();
  *  
  *  Messages and presets from the amp and the app are then queued and processed.
@@ -1532,7 +1532,7 @@ void MessageOut::change_hardware_preset (uint8_t curr_preset, uint8_t preset_num
 
    start_message (cmd_base + 0x38);
    write_byte (curr_preset);
-   write_byte (preset_num)  ;     
+   write_byte (preset_num) ;      
    end_message();  
 }
 
