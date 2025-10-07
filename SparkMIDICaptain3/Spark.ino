@@ -102,15 +102,15 @@ bool spark_state_tracker_start() {
       break; 
   }
 
-  if (spark_type != LIVE) { // should be NOT LIVE but just doing this anyway
-    num_inputs = 1;
-    num_presets = 4;                 
-    max_preset = 3;
-  }  
-  else {
+  if (spark_type == LIVE || spark_type == SPARK2) { 
     num_inputs = 2;
     num_presets = 8;          
     max_preset = 7;
+  }  
+  else {
+    num_inputs = 1;
+    num_presets = 4;                 
+    max_preset = 3;
   }
 
   spark_state = SPARK_CONNECTED;     // it has to be to have reached here
