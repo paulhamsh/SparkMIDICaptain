@@ -337,7 +337,7 @@ bool update_midi(byte *mid) {
   if (got_midi) {
     Serial.print("MIDI (");
     Serial.print(midi_source);
-    Serial.print(") ");
+    Serial.print(") 0x");
     Serial.print(mid[0], HEX);
     Serial.print(" ");
     Serial.print(mid[1]);
