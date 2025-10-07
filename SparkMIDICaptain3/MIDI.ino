@@ -265,7 +265,9 @@ void setup_midi() {
 bool update_midi(byte *mid) {
   bool got_midi;
   byte b;
+  char *midi_source;
   
+  midi_source = "";
   got_midi = false;
 
 #ifdef BLE_MIDI
@@ -286,6 +288,7 @@ bool update_midi(byte *mid) {
         mid[0] = midi_buf[0];
         mid[1] = midi_buf[1];
         mid[2] = midi_buf[2];
+        midi_source = "USB HOST";
         got_midi = true;
       }
     }
@@ -300,6 +303,7 @@ bool update_midi(byte *mid) {
       USBHostBuf.get(&mid[0]);
       USBHostBuf.get(&mid[1]);
       USBHostBuf.get(&mid[2]);
+      midi_source = "USB S3";
       got_midi = true;
     }
     else
@@ -324,13 +328,16 @@ bool update_midi(byte *mid) {
       mid[2] = ser1->read();
       
     if (mid[0] != 0xFE) {
+      midi_source = "SERIAL DIN MIDI";
       got_midi = true;
     }
   }
 
 
   if (got_midi) {
-    Serial.print("MIDI ");
+    Serial.print("MIDI (");
+    Serial.print(midi_source);
+    Serial.print(") ");
     Serial.print(mid[0], HEX);
     Serial.print(" ");
     Serial.print(mid[1]);

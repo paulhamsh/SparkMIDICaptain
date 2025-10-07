@@ -223,8 +223,9 @@ bool  update_spark_state() {
   // sort out connection and sync progress
   if (!ble_spark_connected) {
     spark_state = SPARK_DISCONNECTED;
-    DEBUG("Spark disconnected, try to reconnect...");
-    if (millis() - spark_ping_timer > 200) {
+    
+    if (millis() - spark_ping_timer > 500) {
+      DEBUG("Spark disconnected, try to reconnect...");
       spark_ping_timer = millis();
       connect_spark();  // reconnects if any disconnects happen    
       if (ble_spark_connected)
