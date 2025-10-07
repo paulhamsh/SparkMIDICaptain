@@ -9,7 +9,7 @@
  *  The Message handles all other changes - change amp, change effect, change value of an effect parameter, change hardware preset and so on
  *  
  *  Conection is handled with the two commands:
- *  
+ *  select_live_input_1();
  *    connect_to_all();
  *  
  *  Messages and presets from the amp and the app are then queued and processed.

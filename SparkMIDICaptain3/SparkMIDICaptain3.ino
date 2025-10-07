@@ -58,7 +58,7 @@ void setup() {
 
   num_mods = sizeof(mods) / sizeof(char *);
   my_mod = 0;
-  Serial.print("Number of modss in list ");
+  Serial.print("Number of mods in list ");
   Serial.println(num_mods);
 }
 

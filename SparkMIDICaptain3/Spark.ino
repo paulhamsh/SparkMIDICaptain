@@ -429,11 +429,17 @@ void update_ui_hardware() {
 
 
 void set_input1() {
-  if (spark_type == LIVE) {
+  /*
+  // DOn't think I ever implemented select_live_input_1() !!
+  
+  if (spark_type == LIVE || spark_type == SPARK2) {
     spark_msg_out.select_live_input_1();
     spark_send();
   }
+  */
 }
+
+
 ///// ROUTINES TO CHANGE AMP SETTINGS
 
 void change_generic_model(char *new_eff, int slot) {
