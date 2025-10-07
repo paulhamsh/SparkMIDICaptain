@@ -35,27 +35,51 @@ MidiCaptainv3 only works with NimBLE 2.3.6 and the ESP32 S3.
 On startup, you should see this - turn on the Spark amp first!:     
 
 ```
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x118c
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xc20
+load:0x403cb700,len:0x30e0
+entry 0x403c88b8
 Spark MIDI Captain
 ==================
-Scanning...
-Found 'Spark 2 BLE'
+Scanning for Spark
+Found 'Spark MINI BLE'
+Scanning for BLE MIDI device
 Spark connected
 connect_spark(): Spark connected
 Available for app to connect...
 Bluetooth library is NimBLE
 SparkIO version: CircularArray and malloc
-SPARK TYPE Got serial number
+SPARK TYPE: Spark MINI
+Got serial number
 Got firmware version
-Failed to get checksum
+Got checksum
 Got serial number
 Got preset: 0
 Got preset: 1
 Got preset: 2
 Got preset: 3
+Missed preset: 256
+CLEARED SPARK
 Got preset: 9
 End of setup
 Starting
+MIDI (SERIAL DIN MIDI) 0x0 255 255
+MIDI (USB S3) 0x90 57 41
+MIDI (USB S3) 0x80 57 0
+Toggle noisegateMessage: 315
+Got message 315
+MIDI (USB S3) 0x90 55 10
+MIDI (USB S3) 0x80 55 0
+MIDI (USB S3) 0x90 53 1
+MIDI (USB S3) 0x80 53 0
 ```
+
 
 
 
