@@ -59,14 +59,14 @@ void loop() {
       switch (mi[1]) {
         case 10: change_amp_param(AMP_GAIN,   mi[2]/127.0); 
                    Serial.print("Change amp gain ");
-                   Serial.print(mi[2]/127.0);
+                   Serial.println(mi[2]/127.0);
                    break;
         case 11: change_amp_param(AMP_MASTER, mi[2]/127.0); 
                    Serial.print("Change amp master volume ");
-                   Serial.print(mi[2]/127.0);
+                   Serial.println(mi[2]/127.0);
                    break;         
         case 20: change_noisegate_toggle();  
-                   Serial.print("Toggle noisegate");               
+                   Serial.println("Toggle noisegate");               
                    break;
         case 21: change_comp_toggle();                      
                    Serial.println("Toggle comp");      
@@ -99,7 +99,7 @@ void loop() {
     if (midi_cmd == 0x80) {     
       switch (mi[1]) {
         case 57: change_noisegate_toggle();  
-                   Serial.print("Toggle noisegate");               
+                   Serial.println("Toggle noisegate");               
                    break;
         case 59: change_comp_toggle();                      
                    Serial.println("Toggle comp");      
