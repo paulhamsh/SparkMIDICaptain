@@ -72,13 +72,15 @@ Starting
 MIDI (SERIAL DIN MIDI) 0x0 255 255
 MIDI (USB S3) 0x90 57 41
 MIDI (USB S3) 0x80 57 0
-Toggle noisegateMessage: 315
+Toggle noisegate
+Message: 315
 Got message 315
 MIDI (USB S3) 0x90 55 10
 MIDI (USB S3) 0x80 55 0
 MIDI (USB S3) 0x90 53 1
 MIDI (USB S3) 0x80 53 0
 ```
+
 
 
 
