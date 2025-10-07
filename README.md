@@ -2,7 +2,8 @@
 
 Use ESP32, Spark amp and Midi Captain pedal       
 Now two versions, one for ESP32 and separate USBHost board, the other for an ESP32 S3 with onboard USB Host capability (plus an OTG cable)     
-See https://github.com/paulhamsh/SparkMIDI for all ther other information about this project.   
+See https://github.com/paulhamsh/SparkMIDI for all other information about this project.   
+Also see https://github.com/paulhamsh/SparkIO6   
     
 ## Dependencies:
 
@@ -75,6 +76,7 @@ Toggle delay
 Message: 315
 Got message 315
 ```
+
 
 
 
