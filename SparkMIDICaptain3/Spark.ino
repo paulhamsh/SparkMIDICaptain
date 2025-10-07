@@ -1,5 +1,21 @@
 #include "Spark.h"
 
+
+void dump_preset(SparkPreset preset)
+{
+  Serial.print("Preset: ");
+  Serial.println(preset.Name);
+  Serial.print("Current : preset ");
+  Serial.print(preset.curr_preset);
+  Serial.print(" ");
+  Serial.println(preset.preset_num);  
+  for (int i = 0; i < 7; i++) {
+    Serial.print("  ");
+    Serial.println(preset.effects[i].EffectName);
+  }
+}
+
+
 ///// ROUTINES TO SYNC TO AMP SETTINGS
 
 int selected_preset;
@@ -264,7 +280,9 @@ bool  update_spark_state() {
         DEBUG(preset.preset_num);
 
         presets[pres][input] = preset;          // don't use current input to store
-        //dump_preset(presets[pres][input]);
+        
+        dump_preset(presets[pres][input]);
+        
         break;
       // change of amp model
       case 0x0306:
