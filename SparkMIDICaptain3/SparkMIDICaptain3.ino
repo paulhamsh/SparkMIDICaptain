@@ -26,6 +26,11 @@ char *amps[]{"Twin","94MatchDCV2","RolandJC120","Bassman","AC Boost","AmericanHi
 int num_amps;
 int my_amp;
 
+char *mods[]{"Cloner","Flanger","ChorusAnalog","UniVibe","Tremolator","Tremolo","Phaser","UniVibe"};
+int num_mods;
+int my_mod;
+
+
 void setup() {
   Serial.begin(115200);
   while (!Serial) {};
@@ -45,10 +50,16 @@ void setup() {
   DEBUG("Starting");
 
   my_preset = 0;
+
   num_amps = sizeof(amps) / sizeof(char *);
   my_amp = 0;
   Serial.print("Number of amps in list ");
   Serial.println(num_amps);
+
+  num_mods = sizeof(mods) / sizeof(char *);
+  my_mod = 0;
+  Serial.print("Number of modss in list ");
+  Serial.println(num_mods);
 }
 
 void loop() {
@@ -107,7 +118,12 @@ void loop() {
                    Serial.print("Change amp model to ");
                    Serial.println(amps[my_amp]);
                    break; 
-
+        case 83:   my_mod++;
+                   if (my_mod >= num_mods)  my_mod = 0;
+                   change_mod_model(mods[my_mod]);
+                   Serial.print("Change mod model to ");
+                   Serial.println(mods[my_mod]);
+                   break; 
       }
     }
 
